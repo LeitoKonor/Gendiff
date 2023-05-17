@@ -13,7 +13,9 @@ This is small console util written on Python which helps to calculate differnce 
 ### Install
 
 git clone git@github.com:LeitoKonor/python-project-50.git
+
 cd python-project-50
+
 make setup
 
 ### How it works
