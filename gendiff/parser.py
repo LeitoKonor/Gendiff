@@ -1,9 +1,5 @@
 import argparse
 
-STYLISH = 'stylish'
-PLAIN = 'plain'
-JSON = 'json'
-
 
 def parse_input():
     parser = argparse.ArgumentParser(
@@ -20,8 +16,8 @@ def parse_input():
     parser.add_argument(
         '-f', '--format',
         help='set format of output (default: "stylish")',
-        choices=[STYLISH, PLAIN, JSON],
-        default=STYLISH
+        choices=['stylish', 'plain', 'json'],
+        default='stylish'
     )
     args = parser.parse_args()
 

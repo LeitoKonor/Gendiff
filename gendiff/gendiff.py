@@ -1,34 +1,19 @@
 import json
-import os
 
 import yaml
-from gendiff.output_views.json import json_output
-from gendiff.output_views.plain import plain_output
-from gendiff.output_views.stylish import stylish_output
-
-STATUS = 'status'
-ADDED = 'added'
-DELETED = 'deleted'
-CHANGED = 'changed'
-UNCHANGED = 'unchanged'
-
-VALUE = 'value'
-OLD_VALUE = 'old_value'
-NEW_VALUE = 'new_value'
-
-STYLISH = 'stylish'
-PLAIN = 'plain'
-JSON = 'json'
+from gendiff.formatters.json import json_output
+from gendiff.formatters.plain import plain_output
+from gendiff.formatters.stylish import stylish_output
 
 
-def extract_data(path: str) -> dict:
-    absolute_path = os.path.abspath(path)
-
-    with open(absolute_path) as import_file:
-        if absolute_path.endswith('.yml') or absolute_path.endswith('.yaml'):
+def extract_data(path) -> dict:
+    with open(path) as import_file:
+        if path.endswith('.yml') or path.endswith('.yaml'):
             result = yaml.safe_load(import_file)
-        elif absolute_path.endswith('.json'):
+        elif path.endswith('.json'):
             result = json.load(import_file)
+        else:
+            raise ValueError('This extension is not supported!')
 
     return result
 
@@ -40,38 +25,38 @@ def make_diff(file1: dict, file2: dict) -> dict:
     for key in keys:
         if key not in file1:
             result[key] = {
-                STATUS: ADDED,
-                VALUE: file2.get(key)
+                'status': 'added',
+                'value': file2.get(key)
             }
         elif key not in file2:
             result[key] = {
-                STATUS: DELETED,
-                VALUE: file1.get(key)
+                'status': 'deleted',
+                'value': file1.get(key)
             }
         elif file1[key] == file2[key]:
             if isinstance(file1[key], dict) and \
                     isinstance(file2[key], dict):
                 result[key] = {
-                    STATUS: UNCHANGED,
-                    VALUE: make_diff(file1[key], file2[key])
+                    'status': 'unchanged',
+                    'value': make_diff(file1[key], file2[key])
                 }
             else:
                 result[key] = {
-                    STATUS: UNCHANGED,
-                    VALUE: file1.get(key)
+                    'status': 'unchanged',
+                    'value': file1.get(key)
                 }
         else:
             if isinstance(file1[key], dict) and \
                     isinstance(file2[key], dict):
                 result[key] = {
-                    STATUS: CHANGED,
-                    VALUE: make_diff(file1[key], file2[key])
+                    'status': 'changed',
+                    'value': make_diff(file1[key], file2[key])
                 }
             else:
                 result[key] = {
-                    STATUS: CHANGED,
-                    OLD_VALUE: file1[key],
-                    NEW_VALUE: file2[key]
+                    'status': 'changed',
+                    'old_value': file1[key],
+                    'new_value': file2[key]
                 }
 
     return result
@@ -80,19 +65,19 @@ def make_diff(file1: dict, file2: dict) -> dict:
 def generate_diff(
         file_path1: str,
         file_path2: str,
-        format_name: str = STYLISH
+        format_name: str = 'stylish'
 ) -> str:
 
     file_data1, file_data2 = extract_data(file_path1), extract_data(file_path2)
     data_diff = make_diff(file_data1, file_data2)
 
-    if format_name == STYLISH:
+    if format_name == 'stylish':
         return stylish_output(data_diff)
 
-    elif format_name == PLAIN:
+    elif format_name == 'plain':
         return plain_output(data_diff)
 
-    elif format_name == JSON:
+    elif format_name == 'json':
         return json_output(data_diff)
 
     return None

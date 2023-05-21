@@ -1,16 +1,6 @@
 import itertools
 from collections import OrderedDict
 
-STATUS = 'status'
-ADDED = 'added'
-DELETED = 'deleted'
-CHANGED = 'changed'
-UNCHANGED = 'unchanged'
-
-VALUE = 'value'
-OLD_VALUE = 'old_value'
-NEW_VALUE = 'new_value'
-
 
 def stylish_output(file: dict):
 
@@ -25,10 +15,10 @@ def stylish_output(file: dict):
         spaces_count = 1
         deep_indent_size = depth + spaces_count
         condition = {
-            ADDED: '  + ',
-            DELETED: '  - ',
-            CHANGED: '    ',
-            UNCHANGED: '    '
+            'added': '  + ',
+            'deleted': '  - ',
+            'changed': '    ',
+            'unchanged': '    '
         }
         replacer = '    '
         deep_indent = replacer * (deep_indent_size - 1)
@@ -39,40 +29,40 @@ def stylish_output(file: dict):
             if not isinstance(value, dict):
                 lines.append(
                     f"{deep_indent}"
-                    f"{condition[UNCHANGED]}"
+                    f"{condition['unchanged']}"
                     f"{key}: "
                     f"{value}"
                 )
 
-            elif value.get(VALUE):
+            elif value.get('value'):
                 lines.append(
                     f"{deep_indent}"
-                    f"{condition[value.get(STATUS, UNCHANGED)]}"
+                    f"{condition[value.get('status', 'unchanged')]}"
                     f"{key}: "
-                    f"{iter_(value.get(VALUE), deep_indent_size)}"
+                    f"{iter_(value.get('value'), deep_indent_size)}"
                 )
 
-            elif value.get(STATUS) == CHANGED:
+            elif value.get('status') == 'changed':
 
                 lines.append(
                     f"{deep_indent}"
-                    f"{condition[DELETED]}"
+                    f"{condition['deleted']}"
                     f"{key}: "
-                    f"{iter_(value.get(OLD_VALUE), deep_indent_size)}"
+                    f"{iter_(value.get('old_value'), deep_indent_size)}"
                 )
                 lines.append(
                     f"{deep_indent}"
-                    f"{condition[ADDED]}"
+                    f"{condition['added']}"
                     f"{key}: "
-                    f"{iter_(value.get(NEW_VALUE), deep_indent_size)}"
+                    f"{iter_(value.get('new_value'), deep_indent_size)}"
                 )
 
             else:
                 lines.append(
                     f"{deep_indent}"
-                    f"{condition[value.get(STATUS, UNCHANGED)]}"
+                    f"{condition[value.get('status', 'unchanged')]}"
                     f"{key}: "
-                    f"{iter_(value.get(VALUE, value), deep_indent_size)}"
+                    f"{iter_(value.get('value', value), deep_indent_size)}"
                 )
 
         result = itertools.chain("{", lines, [current_indent + "}"])

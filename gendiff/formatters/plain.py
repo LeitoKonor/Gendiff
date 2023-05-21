@@ -1,15 +1,5 @@
 from collections import OrderedDict
 
-STATUS = 'status'
-ADDED = 'added'
-DELETED = 'deleted'
-CHANGED = 'changed'
-
-VALUE = 'value'
-OLD_VALUE = 'old_value'
-NEW_VALUE = 'new_value'
-COMPLEX_VALUE = '[complex value]'
-
 
 def plain_output(file: dict):
     def iter_(value, path):
@@ -28,27 +18,27 @@ def plain_output(file: dict):
             new_path = path + f"{key}."
 
             if not isinstance(value, dict):
-                lines.append(COMPLEX_VALUE)
+                lines.append('[complex value]')
 
-            elif value.get(STATUS) == CHANGED and value.get(VALUE):
+            elif value.get('status') == 'changed' and value.get('value'):
                 lines.append(
-                    f"{(iter_(value.get(VALUE), new_path))}"
+                    f"{(iter_(value.get('value'), new_path))}"
                 )
 
-            elif value.get(STATUS) == CHANGED and not value.get(VALUE):
+            elif value.get('status') == 'changed' and not value.get('value'):
                 lines.append(
                     f"{path}{key}' was updated. "
-                    f"From {iter_(value.get(OLD_VALUE), path)} "
-                    f"to {iter_(value.get(NEW_VALUE), path)}"
+                    f"From {iter_(value.get('old_value'), path)} "
+                    f"to {iter_(value.get('new_value'), path)}"
                 )
 
-            elif value.get(STATUS) == ADDED:
+            elif value.get('status') == 'added':
                 lines.append(
                     f"{path}{key}' was added with value: "
-                    f"{iter_(value.get(VALUE), path)}"
+                    f"{iter_(value.get('value'), path)}"
                 )
 
-            elif value.get(STATUS) == DELETED:
+            elif value.get('status') == 'deleted':
                 lines.append(
                     f"{path}{key}' was removed"
                 )
