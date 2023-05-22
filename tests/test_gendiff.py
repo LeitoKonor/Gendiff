@@ -1,8 +1,8 @@
 from gendiff import generate_diff  # noqa
 from gendiff.gendiff import extract_data, make_diff
-from gendiff.output_views.json import json_output
-from gendiff.output_views.plain import plain_output
-from gendiff.output_views.stylish import stylish_output
+from gendiff.formatters.json import json_output
+from gendiff.formatters.plain import plain_output
+from gendiff.formatters.stylish import stylish_output
 from tests.fixtures.data import EXTRACT_RESULT, MAKE_DIFF_RESULT
 
 STYLISH = 'stylish'
