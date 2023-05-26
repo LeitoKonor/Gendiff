@@ -6,14 +6,15 @@ from gendiff.formatters.plain import plain_output
 from gendiff.formatters.stylish import stylish_output
 
 
-def extract_data(path) -> dict:
-    with open(path) as import_file:
-        if path.endswith('.yml') or path.endswith('.yaml'):
+def extract_data(path: str) -> dict:
+    if path.endswith('.yml') or path.endswith('.yaml'):
+        with open(path) as import_file:
             result = yaml.safe_load(import_file)
-        elif path.endswith('.json'):
+    elif path.endswith('.json'):
+        with open(path) as import_file:
             result = json.load(import_file)
-        else:
-            raise ValueError('This extension is not supported!')
+    else:
+        raise ValueError('This extension is not supported!')
 
     return result
 
