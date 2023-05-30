@@ -1,18 +1,15 @@
 import json
-
 import yaml
 from gendiff.formatters.json import json_output
 from gendiff.formatters.plain import plain_output
 from gendiff.formatters.stylish import stylish_output
 
 
-def extract_data(path: str) -> dict:
+def extract_data(path) -> dict:
     if path.endswith('.yml') or path.endswith('.yaml'):
-        with open(path) as import_file:
-            result = yaml.safe_load(import_file)
+        result = yaml.safe_load(open(path))
     elif path.endswith('.json'):
-        with open(path) as import_file:
-            result = json.load(import_file)
+        result = json.load(open(path))
     else:
         raise ValueError('This extension is not supported!')
 
