@@ -5,7 +5,7 @@ from gendiff.formatters.plain import plain_output
 from gendiff.formatters.stylish import stylish_output
 
 
-def extract_data(path, extension) -> dict:
+def extract_data(path, extension="json") -> dict:
     if extension == 'yml' or extension == 'yaml':
         result = yaml.safe_load(path)
     elif extension == 'json':

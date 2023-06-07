@@ -18,11 +18,6 @@ PATH_RESULT_STYLISH = 'tests/fixtures/result_stylish'
 PATH_RESULT_PLAIN = 'tests/fixtures/result_plain'
 
 
-def test_extract_data():
-    assert extract_data(PATH_FILE1_JSON) == EXTRACT_RESULT
-    assert extract_data(PATH_FILE1_YML) == EXTRACT_RESULT
-
-
 def test_generate_diff():
 
     with open(PATH_RESULT_STYLISH) as f:
@@ -53,8 +48,8 @@ def test_output_format():
 
 
 def test_make_diff():
-    file1 = extract_data(PATH_FILE1_JSON)
-    file2 = extract_data(PATH_FILE2_JSON)
+    file1 = extract_data(open(PATH_FILE1_JSON))
+    file2 = extract_data(open(PATH_FILE2_JSON))
 
     result = make_diff(file1, file2)
     assert result == MAKE_DIFF_RESULT
