@@ -5,11 +5,11 @@ from gendiff.formatters.plain import plain_output
 from gendiff.formatters.stylish import stylish_output
 
 
-def extract_data(path) -> dict:
-    if path.endswith('.yml') or path.endswith('.yaml'):
-        result = yaml.safe_load(open(path))
-    elif path.endswith('.json'):
-        result = json.load(open(path))
+def extract_data(path, extension) -> dict:
+    if extension == 'yml' or extension == 'yaml':
+        result = yaml.safe_load(path)
+    elif extension == 'json':
+        result = json.load(path)
     else:
         raise ValueError('This extension is not supported!')
 
@@ -66,7 +66,8 @@ def generate_diff(
         format_name: str = 'stylish'
 ) -> str:
 
-    file_data1, file_data2 = extract_data(file_path1), extract_data(file_path2)
+    file_data1 = extract_data(open(file_path1), file_path1.split('.')[-1])
+    file_data2 = extract_data(open(file_path2), file_path2.split('.')[-1])
     data_diff = make_diff(file_data1, file_data2)
 
     if format_name == 'stylish':
