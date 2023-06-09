@@ -5,11 +5,11 @@ from gendiff.formatters.plain import plain_output
 from gendiff.formatters.stylish import stylish_output
 
 
-def extract_data(path, extension='json') -> dict:
+def extract_data(opened_file, extension) -> dict:
     if extension == 'yml' or extension == 'yaml':
-        result = yaml.safe_load(path)
+        result = yaml.safe_load(opened_file)
     elif extension == 'json':
-        result = json.load(path)
+        result = json.load(opened_file)
     else:
         raise ValueError('This extension is not supported!')
 

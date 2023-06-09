@@ -48,8 +48,8 @@ def test_output_format():
 
 
 def test_make_diff():
-    file1 = extract_data(open(PATH_FILE1_JSON))
-    file2 = extract_data(open(PATH_FILE2_JSON))
+    file1 = extract_data(open(PATH_FILE1_JSON), extension='json')
+    file2 = extract_data(open(PATH_FILE2_JSON), extension='json')
 
     result = make_diff(file1, file2)
     assert result == MAKE_DIFF_RESULT
